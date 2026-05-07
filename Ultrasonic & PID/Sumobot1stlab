@@ -1,0 +1,26 @@
+# cyberbot_sumo_ir_qti_ring_edge
+from cyberbot import *
+from navigate import *
+
+display.off()
+
+def maneuver(vL, vR, t):
+    if vR is not None:
+        vR = -vR
+    bot(18).servo_speed(vL)
+    bot(19).servo_speed(vR)
+    sleep(t)
+
+while True:
+    bot(4).write_digital(0)
+    bot(4).read_digital()
+    bot(4).write_digital(0)
+    t_echo = bot(5).pulse_in(1)
+    cm = t_echo * 0.01715
+    if cm > 30:
+        maneuver(30, 30, 20)
+    elif cm < 15:
+        maneuver(-30, -30, 20)
+    else:
+        maneuver(None, None, 1)
+    sleep(750)
